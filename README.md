@@ -20,7 +20,7 @@ Contains the results from running the code in the simulation-code folder as desc
 
 ### figures  
 
-Produces Figures 1-7 in the paper. Figures 1-2, 4, 5, and 6-7 depend on the simulation-results folder. 
+Produces Figures 1-8 in the paper. Figures 1-2, 4, 5, and 6-7 depend on the simulation-results folder. 
 
 ### figures-code  
 
