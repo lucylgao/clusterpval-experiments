@@ -180,26 +180,3 @@ wald_test <- function(X, link, K, k1, k2, iso=TRUE, sig=NULL, SigInv = NULL) {
   pval <- 1 - pchisq(stat^2/scale_factor, df=q)
   return(list(stat=stat, pval=pval))
 }
-
-wald_test_1f <- function(X, link, K, k1, k2, feat, iso=TRUE, sig=NULL, SigInv=NULL) { 
-  n <- nrow(X)
-  q <- ncol(X)
-  
-  hcl <- fastcluster::hclust(dist(X)^2, method=link)
-  hcl_at_K <- cutree(hcl, K)
-  
-  stat <- mean(X[hcl_at_K == k1, feat]) - mean(X[hcl_at_K == k2, feat])
-  n1 <- sum(hcl_at_K == k1)  
-  n2 <- sum(hcl_at_K == k2) 
-  squared_norm_nu <- 1/n1 + 1/n2
-  
-  if(is.null(sig)) { 
-    sig <- sqrt(sum(scale(X, scale=F)^2)/(n*q - q))
-  }
-    
-  scale_factor <- squared_norm_nu*sig^2
-  
-  pval <- 2*pnorm(-abs(stat), mean=0, sd=sqrt(scale_factor))
-  
-  return(list(stat=abs(stat), pval=pval))
-}
