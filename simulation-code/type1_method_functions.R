@@ -116,7 +116,7 @@ multivariate_Z_test_methods <- sapply(c("single", "average", "centroid", "comple
                                       function(link) make_multivariate_Z_test(link, 3))
 
 sample_split_methods <- sapply(c("single", "average", "centroid", "complete"), 
-                                      function(link) make_sample_split(link, 2))
+                                      function(link) make_sample_split(link, 3))
 
 selective_methods <- sapply(c("single", "average", "centroid", "complete"),
                             function(link) make_iso(link, 3))

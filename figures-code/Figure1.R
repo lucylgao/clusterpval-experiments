@@ -15,15 +15,12 @@ centroids <- aggregate(cbind(Feat1, Feat2)~clusters, X, mean)
 p1 <- ggplot() + geom_point(aes(x=Feat1, y=Feat2, col=clusters), alpha=0.5, cex=3, data=X) + 
   xlab("Feature 1") + ylab("Feature 2") + 
   geom_point(aes(x=Feat1, y=Feat2, col=clusters), shape=17, cex=6,data=centroids) + 
-  scale_colour_discrete(name="", labels=c(expression(bar(x)[hat(C)[1]]), 
-                                          expression(bar(x)[hat(C)[2]]), 
-                                          expression(bar(x)[hat(C)[3]]))) + 
   ggtitle("(a) Data") + xlim(c(-3, 3)) + ylim(c(-3, 3)) + 
   theme_bw(base_size=17) + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
          panel.background = element_rect(colour = "black", size=1), 
         plot.margin = margin(0, 0.1, 0.1, 0.1, "cm")) + 
-  theme(legend.position="left") + guides(color=guide_legend(nrow=3,byrow=TRUE))
+  theme(legend.position="none") + guides(color=guide_legend(nrow=3,byrow=TRUE))
 
 load("../simulation-results/naive-type1-n100-q2-sig1.Rdata")
 

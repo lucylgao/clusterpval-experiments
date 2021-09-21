@@ -1,86 +1,40 @@
+library(palmerpenguins)
 library(ggplot2)
 library(patchwork)
+library(fastcluster)
 
-ev_cat <- NULL
+options(ggplot2.discrete.colour=list(RColorBrewer::brewer.pal(6, "Accent")))
 
-n <- 150
-for(q in c(10)) { 
-for(effect in rev(seq(3, 7, by=0.5))) { 
-    name_of_sim <- paste("../simulation-results/power-n", n, "-q", q, "-effect-", effect, ".Rdata", sep="")
-    if(file.exists(name_of_sim)) { 
-      load(name_of_sim) 
-      ev_cat <- rbind(ev_cat, ev)
-    } 
-}
-}
+# Subset to female penguins in years 2008/2009 & bill/flipper length variables
+penguins <- penguins[complete.cases(penguins), ]
+dat <- penguins[penguins$sex == "female" & penguins$year != 2009, c(1, 3, 5)]
 
-average <- ev_cat[ev_cat$Method == "average-iso-test-K-3", ]
-centroid <- ev_cat[ev_cat$Method == "centroid-iso-test-K-3", ]
-single <- ev_cat[ev_cat$Method == "single-iso-test-K-3", ]
-complete <- ev_cat[ev_cat$Method == "complete-iso-test-K-3", ]
+X <- dat[, -c(1)]
+X <- as.matrix(X)
 
-threshold <- 10
-g1 <- ggplot(average[average$nmin >= threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) +
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(a) Average linkage") 
-  
-g2 <- ggplot(centroid[centroid$nmin >= threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(b) Centroid linkage")
+# Cluster and visualize data
+K <- 5
+hc <- hclust(dist(X)^2, method="average")
+hc$labels <- dat$species
+table( hc$labels, cutree(hc, K))
 
-g3 <- ggplot(single[single$nmin >= threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(c) Single linkage")
+p1 <- ggdendro::ggdendrogram(hc, labels=FALSE) + ggtitle("(a) Dendrogram") + 
+  geom_hline(yintercept=hc$height[nrow(X)-5] - 20, col="red", linetype="dashed") + 
+  ylab("Height") + theme(axis.text.x=element_blank(), 
+                         plot.title = element_text(size=22), 
+                         axis.text.y=element_text(size=22)) 
 
-g4 <- ggplot(complete[complete$nmin >= threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(d) Complete linkage")
+p2 <- ggplot(data = penguins[penguins$sex == "female" & penguins$year != 2009, ]) + 
+  geom_point(aes(x=bill_length_mm, y = flipper_length_mm, 
+                 fill = as.factor(cutree(hc, 5)),
+                 shape=as.factor(species)), size = 5, colour="black") + 
+  scale_fill_discrete(name="Clusters", 
+                        guide=guide_legend(ncol=2, 
+             override.aes=list(shape=21))) + 
+  scale_shape_manual(name="Species", values=c(21, 24, 22), 
+                     guide=guide_legend(override.aes=list(fill="black"))) + 
+  xlab("Bill length (mm)") + ylab("Flipper length (mm)") + 
+  coord_flip() +  
+  theme_bw(base_size=22) + ggtitle("(b) Data") + theme(legend.position="right")
 
-ggsave(((g1 + g2 + g3 + g4) + plot_layout(nrow=1)) & theme_bw(base_size = 13), 
-       file="../figures/Figure6abcd.pdf", 
-       width=12, height=2.5)
-
-p1 <- ggplot(average[average$nmin < threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(e) Average linkage") 
-
-p2 <- ggplot(centroid[centroid$nmin <  threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(f) Centroid linkage") 
-
-p3 <- ggplot(single[single$nmin < threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(g) Single linkage") 
-
-p4 <- ggplot(complete[complete$nmin < threshold, ])+ 
-  geom_smooth(aes(x=effect, y=as.numeric(rejects)), 
-              method="gam", method.args = list(family = "binomial")) + ylim(c(0, 1)) + 
-  ylab(expression("Power at"~alpha~"= 0.05")) + 
-  xlab(expression(paste("Effect size (", Delta, ")", sep=""))) + 
-  ggtitle("(h) Complete linkage")
-
-ggsave(((p1 + p2 + p3 + p4) + plot_layout(nrow=1)) & theme_bw(base_size = 13), 
-       file="../figures/Figure6efgh.pdf", width=12, height=2.5)
-
-
+ggsave(p1+p2, file="../figures/Figure6.pdf", width=14, height=4)

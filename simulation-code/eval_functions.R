@@ -8,6 +8,7 @@ recover <- new_metric(name="recover", label="recover", metric=function(model, ou
 n1 <- new_metric(name="n1", label="n1", metric=function(model, out) out$npair[1])
 n2 <- new_metric(name="n2", label="n2", metric=function(model, out) out$npair[2])
 nmin <- new_metric(name="nmin", label="nmin", metric=function(model, out) min(out$npair))
+nmax <- new_metric(name="nmax", label="nmax", metric=function(model, out) max(out$npair))
 boundary <- new_metric(name="boundary", label="boundary", 
                        metric=function(model, out) { 
                          
@@ -20,3 +21,5 @@ boundary <- new_metric(name="boundary", label="boundary",
                          }
                        } 
 )
+
+sd <- new_metric(name="sd", label="sd", metric=function(model, out) out$sd)

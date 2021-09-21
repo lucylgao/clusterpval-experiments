@@ -32,7 +32,7 @@ shapedata <- ggplot(dat) + geom_point(aes(X1, X2, shape=as.factor(c(rep(1, 50), 
   ggtitle("(a) Data") + xlab("Feature 1") + ylab("Feature 2")
 
 hc <- hclust(dist(X[1:50, ])^2, method="average")
-dat.train$est <- as.factor(cutree(hc, 2))
+dat.train$est <- as.factor(cutree(hc, 3))
 
 traindata <- ggplot(dat.train) +
   geom_point(aes(X1, X2, col=est), cex=2, alpha=1, shape="square") +
@@ -54,7 +54,7 @@ testdata <- ggplot(dat.test) + geom_point(aes(X1, X2, col=est), cex=2, alpha=1, 
 testdata
 
 load("../simulation-results/naive-type1-n100-q2-sig1.Rdata")
-average <- ev[ev$Method == "average-split-Z-test-K-2", ]
+average <- ev[ev$Method == "average-split-Z-test-K-3", ]
 
 qq <- ggplot(average[!is.na(average$stat), ][1:2000, ]) +
   geom_qq(aes(sample=pval, group=Model), size=0.5, distribution=qunif) +
