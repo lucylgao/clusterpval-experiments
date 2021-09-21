@@ -1,6 +1,6 @@
 # clusterpval-experiments 
 
-Code to reproduce simulation results, figures, and real data analysis results from the paper "Selective inference for hierarchical clustering" by Lucy L. Gao, Jacob Bien, and Daniela Witten. Preprint available at https://arxiv.org/abs/2012.02936. Download instructions for our R package "clusterpval" can be found at http://www.lucylgao.com/clusterpval/. 
+Code to reproduce simulation results, figures, and real data analysis results from the paper "Selective inference for hierarchical clustering" by Lucy L. Gao, Jacob Bien, and Daniela Witten. 
 
 ## Organization
 
@@ -33,4 +33,3 @@ Contains the results from calling the code in the figures-code folder.
 The code to run the real data analysis in Section 6.1 is in penguins.R. Instructions on how to download the data can be found [here](https://allisonhorst.github.io/palmerpenguins/articles/download.html). 
 
 The code to run the real data analysis in Section 6.2 is in zheng.R. The T-cell data can be downloaded [here](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/memory_t), the B-cell data can be downloaded [here](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/b_cells) and the monocyte data can be downloaded [here](https://support.10xgenomics.com/single-cell-gene-expression/datasets/1.1.0/cd14_monocytes).  You'll need to put the three resulting folders in the raw directory inside real-data-code and rename the three folders to 'filtered_matrices_mex_memory', 'filtered_matrices_mex_bcell', and 'filtered_matrices_mex_mono'. 
-
