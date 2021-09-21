@@ -1,6 +1,6 @@
 # clusterpval-experiments 
 
-Code to reproduce simulation results, figures, and real data analysis results from the paper "Selective inference for hierarchical clustering" by Lucy L. Gao, Jacob Bien, and Daniela Witten. 
+Code to reproduce simulation results, figures, and real data analysis results from the paper "Selective inference for hierarchical clustering" by Lucy L. Gao, Jacob Bien, and Daniela Witten. Preprint available at https://arxiv.org/abs/2012.02936. Download instructions for our R package "clusterpval" can be found at http://www.lucylgao.com/clusterpval/. 
 
 ## Organization
 
