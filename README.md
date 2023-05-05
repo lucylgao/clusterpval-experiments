@@ -10,7 +10,7 @@ naive_type1.R produces the results displayed in Figures 1-2.
 
 Running our_type1.R with this.sim.id between 1-6 produces the results displayed  in Figure 4.  
 
-Running cond.R with this.sim.id between 1-3 produces the results displayed  in Figure 5.
+Running cond_power.R with this.sim.id between 1-3 produces the results displayed  in Figure 5.
 
 Running our_type1_est.R with this.sim.id between 1-4 produces the results displayed in Figure S1.
 
