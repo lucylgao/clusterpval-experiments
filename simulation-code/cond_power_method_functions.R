@@ -33,7 +33,7 @@ make_iso <- function(link, K) {
                if(link == "complete") {
                   results <- test_complete_hier_clusters_approx(X, hcl, K, k1, k2, sig=model$sig)
                } else {
-                  results <- test_hier_clusters_exact(X, hcl, link, K, k1, k2, sig=model$sig)
+                  results <- test_hier_clusters_exact(X, link, hcl, K, k1, k2, sig=model$sig)
                }
 
                return(list(results=results, effect=effect, recover=recover, npair=npair))
